@@ -39,7 +39,10 @@ def get_normalized_feature(all_stars, feature_columns = ['pmra', 'pmdec', 'paral
     return scaled_features
 
 
-def get_members(all_stars, scaled_features, eps, min_sample):
+def get_members(all_stars, eps, min_sample, feature_columns = ['pmra', 'pmdec', 'parallax']):
+    
+    scaled_features = get_normalized_feature(all_stars, feature_columns = feature_columns)
+    
     db = DBSCAN(eps= eps,min_samples= min_sample).fit(scaled_features)
 
     core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
@@ -94,9 +97,11 @@ def get_MSS_metric(member, non_member, epsilon = 1e-7,
 ## DBSCAN Choosing Hyperparameter ##
 ####################################
 
-def compare_DBSCAN_parameters(all_stars, scaled_features, 
-                              eps, min_samples):
+def compare_DBSCAN_parameters(all_stars, eps, min_samples, 
+                              feature_columns = ['pmra', 'pmdec', 'parallax']):
 
+    scaled_features = get_normalized_feature(all_stars, feature_columns = feature_columns)
+    
     # running DBSCAN with all possible parameters
     mnn_values = np.full((len(eps), len(min_samples)), -1, dtype = 'float32')
     n_members = np.full((len(eps), len(min_samples)), -1, dtype = 'float32')
@@ -143,6 +148,10 @@ def compare_DBSCAN_parameters(all_stars, scaled_features,
     plt.show()
 
     return model_parameters
+
+def save_members(cluster_name, members, output_file):
+        members['Cluster'] = [cluster_name]*len(members)
+        members.to_csv(output_file, index = False)
 
 ###########################
 ## Main Class: GMM Model ##
