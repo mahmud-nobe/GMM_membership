@@ -21,7 +21,7 @@ warnings.filterwarnings('ignore')
 #####################
 ##  Get GAIA data  ##
 #####################
-def get_GAIA_data(name, radius = 1, table = 'gaiaedr3.gaia_source', 
+def get_GAIA_data(name, radius = 1, table = 'gaiadr3.gaia_source', 
                   search = True, preprocess = True, *args, **kwargs):
 
     if search:
@@ -32,8 +32,7 @@ def get_GAIA_data(name, radius = 1, table = 'gaiaedr3.gaia_source',
 
         radius = u.Quantity(radius, u.deg)
         Gaia.ROW_LIMIT = -1
-        table = table
-        j = Gaia.cone_search_async(coordinate, radius)
+        j = Gaia.cone_search_async(coordinate, radius, table_name = table)
         r = j.get_results()
 
         all_stars = r.to_pandas()
