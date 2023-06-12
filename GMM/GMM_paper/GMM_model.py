@@ -310,13 +310,13 @@ class Run_GMM_Model():
 ##  Get GMM Member ##
 #####################
 def get_GMM_member(cluster_name, all_stars, cantat_clusters = get_cantat_data(data='cluster'),
-                   member_cutoff = 0.9, visualize_member = True):
+                   member_cutoff = 0.9, visualize_member = True, max_hw=1400):
     
     # distance of the cluster taken from Cantat-Gaudin (2018)
 
     
     # range of half-widths
-    half_widths = np.linspace(50, 1400, 28).round(2)
+    half_widths = np.linspace(50, max_hw, 28).round(2)
     half_widths
 
     distance_lit = cantat_clusters.loc[cantat_clusters.Cluster == cluster_name, 'dmode'].iloc[0]
